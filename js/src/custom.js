@@ -100,8 +100,3 @@ $("figure").hover(
 $(document).ready(function() {
   createCopyBtns();
 });
-
-作者：迟道
-链接：https://www.jianshu.com/p/efbeddc5eb19
-來源：简书
-简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。

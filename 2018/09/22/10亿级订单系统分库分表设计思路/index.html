@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="分库分表设计思路," />
 
 
 
@@ -88,13 +88,28 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="若、只如初见">
-<meta property="og:url" content="https://xushugen.github.io/archives/2018/09/index.html">
+<meta name="description" content="一、背景随着公司业务增长，如果每天1000多万笔订单的话，3个月将有约10亿的订单量，之前数据库采用单库单表的形式已经不满足于业务需求，数据库改造迫在眉睫。 二、订单数据如何划分我们可以将订单数据划分成两大类型：分别是热数据和冷数据。 热数据：3个月内的订单数据，查询实时性较高; 冷数据A：3个月 ~ 12个月前的订单数据，查询频率不高; 冷数据B：1年前的订单数据，几乎不会查询，只有偶尔的查询">
+<meta name="keywords" content="分库分表设计思路">
+<meta property="og:type" content="article">
+<meta property="og:title" content="10亿级订单系统分库分表设计思路">
+<meta property="og:url" content="https://xushugen.github.io/2018/09/22/10亿级订单系统分库分表设计思路/index.html">
 <meta property="og:site_name" content="若、只如初见">
+<meta property="og:description" content="一、背景随着公司业务增长，如果每天1000多万笔订单的话，3个月将有约10亿的订单量，之前数据库采用单库单表的形式已经不满足于业务需求，数据库改造迫在眉睫。 二、订单数据如何划分我们可以将订单数据划分成两大类型：分别是热数据和冷数据。 热数据：3个月内的订单数据，查询实时性较高; 冷数据A：3个月 ~ 12个月前的订单数据，查询频率不高; 冷数据B：1年前的订单数据，几乎不会查询，只有偶尔的查询">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://xushugen.github.io/images/depotsTable/depots0.png">
+<meta property="og:image" content="https://xushugen.github.io/images/depotsTable/depots1.png">
+<meta property="og:image" content="https://xushugen.github.io/images/depotsTable/depots2.png">
+<meta property="og:image" content="https://xushugen.github.io/images/depotsTable/depots3.png">
+<meta property="og:image" content="https://xushugen.github.io/images/depotsTable/depots4.png">
+<meta property="og:image" content="https://xushugen.github.io/images/depotsTable/depots5.png">
+<meta property="og:image" content="https://xushugen.github.io/images/depotsTable/depots6.png">
+<meta property="og:image" content="https://xushugen.github.io/images/depotsTable/depots7.png">
+<meta property="og:image" content="https://xushugen.github.io/images/depotsTable/depots8.png">
+<meta property="og:updated_time" content="2018-09-22T02:23:05.382Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="若、只如初见">
+<meta name="twitter:title" content="10亿级订单系统分库分表设计思路">
+<meta name="twitter:description" content="一、背景随着公司业务增长，如果每天1000多万笔订单的话，3个月将有约10亿的订单量，之前数据库采用单库单表的形式已经不满足于业务需求，数据库改造迫在眉睫。 二、订单数据如何划分我们可以将订单数据划分成两大类型：分别是热数据和冷数据。 热数据：3个月内的订单数据，查询实时性较高; 冷数据A：3个月 ~ 12个月前的订单数据，查询频率不高; 冷数据B：1年前的订单数据，几乎不会查询，只有偶尔的查询">
+<meta name="twitter:image" content="https://xushugen.github.io/images/depotsTable/depots0.png">
 
 
 
@@ -124,13 +139,13 @@
 
 
 
-  <link rel="canonical" href="https://xushugen.github.io/archives/2018/09/"/>
+  <link rel="canonical" href="https://xushugen.github.io/2018/09/22/10亿级订单系统分库分表设计思路/"/>
 
 
 
 
 
-  <title>归档 | 若、只如初见</title>
+  <title>10亿级订单系统分库分表设计思路 | 若、只如初见</title>
   
 
 
@@ -153,7 +168,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband">
 		<a href="https://github.com/xushugen"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_green_007200.png" alt="Fork me on GitHub"></a>
 	</div>
@@ -303,148 +318,337 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-      <span class="archive-page-counter">
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://xushugen.github.io/2018/09/22/10亿级订单系统分库分表设计思路/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Xu Shugen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar1.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="若、只如初见">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h1 class="post-title" itemprop="name headline">10亿级订单系统分库分表设计思路</h1>
         
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-22T09:35:34+08:00">
+                2018-09-22
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-09-22T10:23:05+08:00">
+                2018-09-22
+              </time>
+            
+          </span>
+
           
-        
-        嗯..! 目前共计 3 篇日志。 继续努力。
-      </span>
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
 
-      
-
-        
-        
-        
-
-        
+                
+                
+              
+            </span>
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2018">2018</h1>
-          </div>
-        
-        
 
-        
+          
+            
+          
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
+          
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/09/22/10亿级订单系统分库分表设计思路/" itemprop="url">
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
               
-                <span itemprop="name">10亿级订单系统分库分表设计思路</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.8k 字
+                </span>
               
-            </a>
-        
-      </h2>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-09-22T09:35:34+08:00"
-              content="2018-09-22" >
-          09-22
-        </time>
-      </div>
+              
+                <span class="post-meta-divider">|</span>
+              
 
-    </header>
-  </article>
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  6 分钟
+                </span>
+              
+            </div>
+          
 
+          
 
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/09/21/单点登录原理与简单实现/" itemprop="url">
-              
-                <span itemprop="name">单点登录原理与简单实现</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-09-21T09:08:38+08:00"
-              content="2018-09-21" >
-          09-21
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/09/20/Jenkins自动化部署maven项目/" itemprop="url">
-              
-                <span itemprop="name">Jenkins自动化部署maven项目</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-09-20T21:45:50+08:00"
-              content="2018-09-20" >
-          09-20
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+      
+        <p><img src="\images\depotsTable\depots0.png" alt=""></p>
+<h1 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a><strong>一、背景</strong></h1><p>随着公司业务增长，如果每天1000多万笔订单的话，3个月将有约10亿的订单量，之前数据库采用单库单表的形式已经不满足于业务需求，数据库改造迫在眉睫。</p>
+<h1 id="二、订单数据如何划分"><a href="#二、订单数据如何划分" class="headerlink" title="二、订单数据如何划分"></a><strong>二、订单数据如何划分</strong></h1><p>我们可以将订单数据划分成两大类型：分别是热数据和冷数据。</p>
+<p>热数据：3个月内的订单数据，查询实时性较高;</p>
+<p>冷数据A：3个月 ~ 12个月前的订单数据，查询频率不高;</p>
+<p>冷数据B：1年前的订单数据，几乎不会查询，只有偶尔的查询需求;</p>
+<p>可能这里有个疑惑为什么要将冷数据分成两类，因为根据实际场景需求，用户基本不会去查看1年前的数据，如果将这部分数据还存储在db中，那么成本会非常高，而且也不便于维护。另外如果真遇到有个别用户需要查看1年前的订单信息，可以让用户走离线数据查看。</p>
+<p>对于这三类数据的存储，目前规划如下：</p>
+<ul>
+<li><p>热数据： 使用mysql进行存储，当然需要分库分表；</p>
+</li>
+<li><p>冷数据A: 对于这类数据可以存储在ES中，利用搜索引擎的特性基本上也可以做到比较快的查询；</p>
+</li>
+<li><p>冷数据B: 对于这类不经常查询的数据，可以存放到Hive中；</p>
+</li>
+</ul>
+<h1 id="三、MySql-如何分库分表"><a href="#三、MySql-如何分库分表" class="headerlink" title="三、MySql 如何分库分表"></a><strong>三、MySql 如何分库分表</strong></h1><p><strong>3.1、按业务拆分</strong></p>
+<p>在业务初始阶段，为了加快应用上线和快速迭代，很多应用都采用集中式的架构。但是随着业务系统的扩大，系统匾额越来越复杂，越来越难以维护，开发效率变得越来越低，并且对资源的消耗也变得越来越大，通过硬件提高系统性能的成本会变得更高。</p>
+<p>通常一般的电商平台，包含了用户、商品、订单等几大模块，简单的做法是在同一个库中分别建4张表，如下图所示：</p>
+<p><img src="\images\depotsTable\depots1.png" alt=""></p>
+<p>但是随着业务的提升，将所有业务都放在一个库中已经变得越来越难以维护，因此我们建议，将不同业务放在不同的库中，如下图所示：</p>
+<p><img src="\images\depotsTable\depots2.png" alt=""></p>
+<p>由图中我们可以看出，我们将不同的业务放到不同的库中，将原来所有压力由同一个库中分散到不同的库中，提升了系统的吞吐量。</p>
+<p><strong>3.2、分库与分表</strong></p>
+<p>我们知道每台机器无论配置多么好它都有自身的物理上限，所以当我们应用已经能触及或远远超出单台机器的某个上限的时候，我们惟有寻找别的机器的帮助或者继续升级的我们的硬件，但常见的方案还是通过添加更多的机器来共同承担压力。</p>
+<p>我们还得考虑当我们的业务逻辑不断增长，我们的机器能不能通过线性增长就能满足需求？因此，使用数据库的分库分表，能够立竿见影的提升系统的性能，关于为什么要使用数据库的分库分表的其他原因这里不再赘述，主要讲具体的实现策略。</p>
+<p><strong>（1）分表策略</strong></p>
+<p>我们以订单表为例，在订单表中，订单id肯定是不可重复的，因此将该字段当做shard key 是非常适合的,其他表类似。假设订单表的字段如下：</p>
+<p><img src="\images\depotsTable\depots3.png" alt=""></p>
+<p>1create table order(2 order_id bigint(11) ,3</p>
+<p>我们假设预估单个库需要分配100个表满足我们的业务需求，我们可以简单的取模计算出订单在哪个子表中，例如： order_id % 100,</p>
+<p><img src="\images\depotsTable\depots4.png" alt=""></p>
+<p>这时候可能会有人问了，如果我根据order_id 进行分表规则，但是我想根据user_id 查询相应的订单，不是定位不到哪个子表了吗，的确是这样，一旦确定shard key，就只能根据shard key定位到子表进而查询该子表下的数据；如果确实想根据user_id 去查询相关订单，那应该将shard key设置为user_id, 那分表规则也相应的变更为： user_id % 100;</p>
+<p><strong>（2）分库实现策略</strong></p>
+<p>数据库分表能够解决单表数据量很大的时候数据查询的效率问题，但是无法给数据库的并发操作带来效率上的提高，因为分表的实质还是在一个数据库上进行的操作，很容易受数据库IO性能的限制。</p>
+<p>因此，如何将数据库IO性能的问题平均分配出来，很显然将数据进行分库操作可以很好地解决单台数据库的性能问题。</p>
+<p>分库策略与分表策略的实现很相似，最简单的都是可以通过取模的方式进行路由。</p>
+<p>我们还是以order表举例，</p>
+<p>例如：order_id % 库容量,</p>
+<p>如果order_id 不是整数类型，可以先hash 在进行取模，</p>
+<p>例如： hash(order_id) % 库容量</p>
+<p><strong>（3）分库分表结合使用策略</strong></p>
+<p>数据库分表可以解决单表海量数据的查询性能问题，分库可以解决单台数据库的并发访问压力问题。有时候，我们需要同时考虑这两个问题，因此，我们既需要对单表进行分表操作，还需要进行分库操作，以便同时扩展系统的并发处理能力和提升单表的查询性能，就是我们使用到的分库分表。</p>
+<p>如果使用分库分表结合使用的话，不能简单进行order_id 取模操作，需要加一个中间变量用来打散到不同的子表，公式如下：</p>
+<p><img src="\images\depotsTable\depots5.png" alt=""></p>
+<p>中间变量　＝ shard key %（库数量*单个库的表数量）;2库序号　＝　取整（中间变量／单</p>
+<p>例如：数据库有10个，每一个库中有100个数据表，用户的order_id＝1001，按照上述的路由策略，可得：</p>
+<p><img src="\images\depotsTable\depots6.png" alt=""></p>
+<p>这样的话，对于order_id＝1001，将被路由到第1个数据库的第2个表中(索引0 代表1，依次类推)。</p>
+<p><img src="\images\depotsTable\depots7.png" alt=""></p>
+<h1 id="三、整体架构设计"><a href="#三、整体架构设计" class="headerlink" title="三、整体架构设计"></a><strong>三、整体架构设计</strong></h1><p><img src="\images\depotsTable\depots8.png" alt=""></p>
+<p>从图中我们将请求分成read和write请求，write请求比较简单，就是根据分库分表规则写入db即可。</p>
+<p>对于read请求，我们需要计算出查询的是热数据还是冷数据，一般order_id生成规则如下，“商户所在地区号+时间戳+随机数”，我们可以根据时间戳计算出查询的是热数据还是冷数据，（当然具体业务需要具体对待，这里不再详细阐述）</p>
+<p>另外架构图中的冷数据指的是3个月~12个月前的数据，如果是查询一年前的数据，建议直接离线查hive即可。</p>
+<p>图中有一个定时Job，主要用来定时迁移订单数据，需要将冷数据分别迁移到ES和hive中。</p>
 
       
-
     </div>
+    
+    
+    
+	
+	<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+
+  <p><span>本文标题:</span>10亿级订单系统分库分表设计思路</a></p>
+  <p><span>文章作者:</span>Xu Shugen</a></p>
+  <p><span>发布时间:</span>2018年09月22日 - 09:35:34</p>
+  <p><span>最后更新:</span>2018年09月22日 - 10:23:05</p>
+  <p><span>原始链接:</span><a href="/2018/09/22/10亿级订单系统分库分表设计思路/" title="10亿级订单系统分库分表设计思路">https://xushugen.github.io/2018/09/22/10亿级订单系统分库分表设计思路/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://xushugen.github.io/2018/09/22/10亿级订单系统分库分表设计思路/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    clipboard.on('success', $(function(){
+      $(".fa-clipboard").click(function(){
+        swal({   
+          title: "",   
+          text: '复制成功',   
+          html: false,
+          timer: 500,   
+          showConfirmButton: false
+        });
+      });
+    }));  
+</script>
+
+      
+	</div>
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Xu Shugen
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://xushugen.github.io/2018/09/22/10亿级订单系统分库分表设计思路/" title="10亿级订单系统分库分表设计思路">https://xushugen.github.io/2018/09/22/10亿级订单系统分库分表设计思路/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+	
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/分库分表设计思路/" rel="tag"># 分库分表设计思路</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/21/单点登录原理与简单实现/" rel="next" title="单点登录原理与简单实现">
+                <i class="fa fa-chevron-left"></i> 单点登录原理与简单实现
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -452,6 +656,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -472,8 +680,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -544,6 +761,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、背景"><span class="nav-number">1.</span> <span class="nav-text">一、背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、订单数据如何划分"><span class="nav-number">2.</span> <span class="nav-text">二、订单数据如何划分</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、MySql-如何分库分表"><span class="nav-number">3.</span> <span class="nav-text">三、MySql 如何分库分表</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、整体架构设计"><span class="nav-number">4.</span> <span class="nav-text">三、整体架构设计</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -719,6 +952,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
